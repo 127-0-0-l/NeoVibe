@@ -1,6 +1,8 @@
-﻿using NAudio.Dsp;
-using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NeoVibe.AudioProcessors;
+using NeoVibe.Core;
+using NeoVibe.Interfaces;
+using NeoVibe.Visualisers;
 
 namespace NeoVibe
 {
@@ -8,46 +10,54 @@ namespace NeoVibe
     {
         static void Main(string[] args)
         {
-            try
-            {
-                const int FFTLength = 256;
-                var complexBuffer = new Complex[FFTLength];
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IAudioProcessor, NAudioPocessor>()
+                .AddSingleton<IVisualizer, SpectrumVisualizer>()
+                .AddSingleton<NeoVibeApp>()
+                .BuildServiceProvider();
 
-                var audioFile = new AudioFileReader(@"C:\Users\maks\Downloads\Careless Whisper George Michael.mp3");
-                var provider = audioFile.ToSampleProvider();
+            var app = serviceProvider.GetRequiredService<NeoVibeApp>();
+            app.Run();
+            //try
+            //{
+            //    const int FFTLength = 256;
+            //    var complexBuffer = new Complex[FFTLength];
 
-                var bufferedProvider = new SampleToWaveProvider(provider);
-                var outputDevice = new WaveOutEvent();
-                outputDevice.Init(bufferedProvider);
-                outputDevice.Play();
+            //    var audioFile = new AudioFileReader(@"C:\Users\maks\Downloads\Careless Whisper George Michael.mp3");
+            //    var provider = audioFile.ToSampleProvider();
 
-                float[] readBuffer = new float[FFTLength];
+            //    var bufferedProvider = new SampleToWaveProvider(provider);
+            //    var outputDevice = new WaveOutEvent();
+            //    outputDevice.Init(bufferedProvider);
+            //    outputDevice.Play();
 
-                while (outputDevice.PlaybackState == PlaybackState.Playing)
-                {
-                    int samplesRead = provider.Read(readBuffer, 0, FFTLength);
-                    if (samplesRead == 0) break;
+            //    float[] readBuffer = new float[FFTLength];
 
-                    for (int i = 0; i < FFTLength; i++)
-                    {
-                        complexBuffer[i].X = (float)(readBuffer[i] * FastFourierTransform.HammingWindow(i, FFTLength));
-                        complexBuffer[i].Y = 0;
-                    }
+            //    while (outputDevice.PlaybackState == PlaybackState.Playing)
+            //    {
+            //        int samplesRead = provider.Read(readBuffer, 0, FFTLength);
+            //        if (samplesRead == 0) break;
 
-                    FastFourierTransform.FFT(true, (int)Math.Log(FFTLength, 2), complexBuffer);
+            //        for (int i = 0; i < FFTLength; i++)
+            //        {
+            //            complexBuffer[i].X = (float)(readBuffer[i] * FastFourierTransform.HammingWindow(i, FFTLength));
+            //            complexBuffer[i].Y = 0;
+            //        }
 
-                    for (int i = 0; i < FFTLength / 2; i++)
-                    {
-                        float magnitude = (float)Math.Sqrt(complexBuffer[i].X * complexBuffer[i].X + complexBuffer[i].Y * complexBuffer[i].Y);
-                        Console.WriteLine(magnitude);
-                    }
-                    Console.ReadKey();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            //        FastFourierTransform.FFT(true, (int)Math.Log(FFTLength, 2), complexBuffer);
+
+            //        for (int i = 0; i < FFTLength / 2; i++)
+            //        {
+            //            float magnitude = (float)Math.Sqrt(complexBuffer[i].X * complexBuffer[i].X + complexBuffer[i].Y * complexBuffer[i].Y);
+            //            Console.WriteLine(magnitude);
+            //        }
+            //        Console.ReadKey();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
         }
     }
 }
