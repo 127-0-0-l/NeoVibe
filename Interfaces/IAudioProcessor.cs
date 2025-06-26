@@ -12,7 +12,7 @@
 
         void Restart();
 
-        void SetTime(int minutes, int secconds);
+        void SetTime(TimeSpan time);
 
         float[] GetFFT(int minFFTLength);
     }
