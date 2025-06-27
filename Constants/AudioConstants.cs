@@ -1,6 +1,6 @@
-﻿namespace NeoVibe.Core
+﻿namespace NeoVibe.Constants
 {
-    internal static class Constants
+    internal static class AudioConstants
     {
         internal static readonly string[] AudioFileExtensions = ["mp3", "wav", "aiff", "aif"];
 

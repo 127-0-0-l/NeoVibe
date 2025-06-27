@@ -1,4 +1,4 @@
-﻿using NeoVibe.Core;
+﻿using NeoVibe.Constants;
 
 namespace NeoVibe.Utils
 {
@@ -7,7 +7,7 @@ namespace NeoVibe.Utils
         internal static int GetFFTLength(int minLength)
         {
             int fftLength = 2;
-            while (fftLength < minLength && fftLength < Constants.MaxFFTLength)
+            while (fftLength < minLength && fftLength < AudioConstants.MaxFFTLength)
                 fftLength *= 2;
             return fftLength;
         }
