@@ -4,14 +4,25 @@ namespace NeoVibe.Visualisers
 {
     internal class SpectrumVisualizer : IVisualizer
     {
-        void IVisualizer.Init(int height, int width, int fftLength)
+        private int _width = 0;
+        private int _height = 0;
+        private bool[,] _previousFrame;
+
+        bool[,] IVisualizer.RenderFrame(float[] fftData, int width, int height)
         {
-            throw new NotImplementedException();
+            ValidateSize(width, height);
+
+            return _previousFrame;
         }
 
-        bool[,] IVisualizer.RenderFrame(float[] fftData)
+        private void ValidateSize(int width, int height)
         {
-            throw new NotImplementedException();
+            if (width != _width || height != _height)
+            {
+                _width = width;
+                _height = height;
+                _previousFrame = new bool[width, height];
+            }
         }
     }
 }

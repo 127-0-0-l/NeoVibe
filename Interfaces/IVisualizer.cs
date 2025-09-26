@@ -2,8 +2,6 @@
 {
     internal interface IVisualizer
     {
-        void Init(int height, int width, int fftLength);
-
-        bool[,] RenderFrame(float[] fftData);
+        bool[,] RenderFrame(float[] fftData, int width, int height);
     }
 }

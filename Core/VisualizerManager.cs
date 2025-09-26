@@ -4,25 +4,28 @@ namespace NeoVibe.Core
 {
     internal class VisualizerManager
     {
-        private readonly Dictionary<string, IVisualizer> visualizers;
-        private IVisualizer current;
+        private readonly List<IVisualizer> _visualizers;
+        private readonly int _count;
+        private int _index;
 
-        internal VisualizerManager(IEnumerable<IVisualizer> availableVisualizers)
+        internal VisualizerManager(List<IVisualizer> visualizers)
         {
-            visualizers = availableVisualizers.ToDictionary(v => v.GetType().Name.ToLower());
-            current = visualizers.Values.First();
+            if (visualizers == null || visualizers.Count() < 1)
+                throw new Exception();
+
+            _visualizers = visualizers;
+            _count = visualizers.Count();
+            _index = 0;
         }
 
-        internal void SetVisualizer(string name)
+        internal void NextVisualizer()
         {
-            if (visualizers.TryGetValue(name.ToLower(), out var visualizer))
-            {
-                current = visualizer;
-            }
-            else
-            {
-                // show error
-            }
+            _index = _index + 1 < _count ? _index + 1 : 0;
+        }
+
+        internal bool[,] RenderFrame(float[] fftData, int width, int height)
+        {
+            return _visualizers[_index].RenderFrame(fftData, width, height);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace NeoVibe.AudioProcessors
 
             if (_outputDevice.PlaybackState != PlaybackState.Playing || !_outputDevice.IsInitialized())
             {
-                ErrorHandler.ShowError(ErrorMessage.GetErrorMessage(ErrorMessage.OutputDeviceNotInit));
+                ErrorHandler.ShowError(ErrorMessage.OutputDeviceNotInit);
                 return new float[FFTLength / 2];
             }
 
@@ -91,7 +91,7 @@ namespace NeoVibe.AudioProcessors
             if (_outputDevice.IsInitialized())
                 action();
             else
-                ErrorHandler.ShowError(ErrorMessage.GetErrorMessage(ErrorMessage.OutputDeviceNotInit));
+                ErrorHandler.ShowError(ErrorMessage.OutputDeviceNotInit);
         }
 
     }
