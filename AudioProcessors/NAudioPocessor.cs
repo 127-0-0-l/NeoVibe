@@ -3,21 +3,22 @@ using NAudio.Wave;
 using NeoVibe.Constants;
 using NeoVibe.Core;
 using NeoVibe.Extensions;
-using NeoVibe.Interfaces;
 using NeoVibe.Utils;
 
 namespace NeoVibe.AudioProcessors
 {
-    internal class NAudioPocessor : IAudioProcessor
+    internal static class NAudioPocessor
     {
-        private AudioFileReader _audioFileReader;
-        private WaveOutEvent _outputDevice = new WaveOutEvent();
+        private static AudioFileReader _audioFileReader;
+        private static AudioFileReader _fftReader;
+        private static WaveOutEvent _outputDevice = new WaveOutEvent();
 
-        void IAudioProcessor.SetAudio(string filePath)
+        internal static void SetAudio(string filePath)
         {
             try
             {
                 _audioFileReader = new AudioFileReader(filePath);
+                _fftReader = new AudioFileReader(filePath);
                 _outputDevice.Init(_audioFileReader);
                 _outputDevice.Play();
             }
@@ -27,7 +28,7 @@ namespace NeoVibe.AudioProcessors
             }
         }
 
-        void IAudioProcessor.SetTime(TimeSpan time)
+        internal static void SetTime(TimeSpan time)
         {
             ExecuteInitialized(() =>
             {
@@ -35,8 +36,10 @@ namespace NeoVibe.AudioProcessors
             });
         }
 
-        float[] IAudioProcessor.GetFFT(int minFFTLength)
+        internal static float[] GetFFT(int minFFTLength)
         {
+            _fftReader.Position = _audioFileReader.Position;
+
             // multiple by 2 becouse of fft array have two mirrored parts.
             // i take only one of them (fftLength/2 items)
             int FFTLength = AudioUtils.GetFFTLength(minFFTLength) * 2;
@@ -50,7 +53,7 @@ namespace NeoVibe.AudioProcessors
             float[] readBuffer = new float[FFTLength];
             var complexBuffer = new Complex[FFTLength];
 
-            int samplesRead = _audioFileReader.Read(readBuffer, 0, FFTLength);
+            int samplesRead = _fftReader.Read(readBuffer, 0, FFTLength);
             if (samplesRead == 0)
                 return new float[FFTLength / 2];
 
@@ -70,13 +73,13 @@ namespace NeoVibe.AudioProcessors
             return result;
         }
 
-        void IAudioProcessor.Play() => ExecuteInitialized(_outputDevice.Play);
+        internal static void Play() => ExecuteInitialized(_outputDevice.Play);
 
-        void IAudioProcessor.Pause() => ExecuteInitialized(_outputDevice.Pause);
+        internal static void Pause() => ExecuteInitialized(_outputDevice.Pause);
 
-        void IAudioProcessor.Stop() => ExecuteInitialized(_outputDevice.Stop);
+        internal static void Stop() => ExecuteInitialized(_outputDevice.Stop);
 
-        void IAudioProcessor.Restart()
+        internal static void Restart()
         {
             ExecuteInitialized(() =>
             {
@@ -86,7 +89,7 @@ namespace NeoVibe.AudioProcessors
             });
         }
 
-        private void ExecuteInitialized(Action action)
+        private static void ExecuteInitialized(Action action)
         {
             if (_outputDevice.IsInitialized())
                 action();

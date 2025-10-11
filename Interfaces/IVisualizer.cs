@@ -1,6 +1,6 @@
 ﻿namespace NeoVibe.Interfaces
 {
-    internal interface IVisualizer
+    public interface IVisualizer
     {
         bool[,] RenderFrame(float[] fftData, int width, int height);
     }

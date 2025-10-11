@@ -18,14 +18,13 @@ namespace NeoVibe.Core
             _index = 0;
         }
 
-        internal void NextVisualizer()
-        {
-            _index = _index + 1 < _count ? _index + 1 : 0;
-        }
+        internal void NextVisualizer() =>
+            _index = _index < _count - 1 ? ++_index : 0;
 
-        internal bool[,] RenderFrame(float[] fftData, int width, int height)
-        {
-            return _visualizers[_index].RenderFrame(fftData, width, height);
-        }
+        internal void PreviousVisualizer() =>
+            _index = _index > 0 ? --_index : _count - 1;
+
+        internal bool[,] RenderFrame(float[] fftData, int width, int height) =>
+            _visualizers[_index].RenderFrame(fftData, width, height);
     }
 }

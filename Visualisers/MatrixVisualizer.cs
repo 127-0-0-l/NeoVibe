@@ -6,7 +6,18 @@ namespace NeoVibe.Visualisers
     {
         public bool[,] RenderFrame(float[] fftData, int width, int height)
         {
-            return new bool[width, height];
+            bool[,] frame = new bool[width, height];
+            Random rnd = new Random();
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    frame[i, j] = rnd.Next(2) == 1;
+                }
+            }
+
+            return frame;
         }
     }
 }
