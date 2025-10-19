@@ -3,6 +3,7 @@ using NeoVibe.Interfaces;
 using NeoVibe.Layout;
 using NeoVibe.Visualisers;
 using System.Diagnostics;
+using System.Text;
 
 namespace NeoVibe.Core
 {
@@ -38,7 +39,7 @@ namespace NeoVibe.Core
                 new MatrixVisualizer()
             });
 
-            NAudioPocessor.SetAudio(@"C:\Users\maks\Music\yt-music\Ivan B - Way Up.mp3");
+            NAudioPocessor.SetAudio(@"D:\all music\Breaking Point — Unaverage Gang.mp3");
             //Thread play = new Thread(NAudioPocessor.Play);
             //play.Start();
             NAudioPocessor.Play();
@@ -50,6 +51,12 @@ namespace NeoVibe.Core
                 frameTime.Start();
 
                 float[] fft = NAudioPocessor.GetFFT(viewports[0].Width);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < fft.Length; i++)
+                {
+                    sb.Append($"{fft[i]}\n");
+                }
+
                 bool[,] vFrame = visualizerManager.RenderFrame(fft, viewports[0].Width, viewports[0].Height);
                 visualizerViewport.SetFrame(vFrame);
                 ConsoleRenderer.RenderFrame();

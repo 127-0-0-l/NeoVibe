@@ -19,8 +19,8 @@ namespace NeoVibe.Core
         {
             switch (key)
             {
-                case ConsoleKey.N:
-                    //do smth;
+                case ConsoleKey.Escape:
+                    Environment.Exit(Environment.ExitCode);
                     break;
                 default:
                     return;
@@ -33,13 +33,9 @@ namespace NeoVibe.Core
 
             var viewport = _viewports[0].GetViewport();
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < _consoleWidth; i++)
-            {
-                for (int j = 0; j < _consoleHeight; j++)
-                {
-                    sb.Append(viewport[i, j]);
-                }
-            }
+            for (int i = 0; i < _consoleHeight; i++)
+                for (int j = 0; j < _consoleWidth; j++)
+                    sb.Append(viewport[j, i]);
 
             Console.SetCursorPosition(0, 0);
             Console.Write(sb);
