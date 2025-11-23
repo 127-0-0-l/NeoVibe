@@ -35,12 +35,12 @@ namespace NeoVibe.Core
             // init visualizers
             VisualizerManager visualizerManager = new VisualizerManager(new List<IVisualizer>
             {
-                //new SpectrumVisualizer(),
-                new MatrixVisualizer()
+                new SpectrumVisualizer(),
+                //new MatrixVisualizer()
             });
 
-            IAudioProcessor audioProcessor = new NAudioPocessor();
-            audioProcessor.SetAudio(@"C:\Users\maks\Downloads\Linkin Park - Burn It Down.mp3");
+            IAudioProcessor audioProcessor = new BassNetProcessor();
+            audioProcessor.SetAudio(@"D:\all music\Watch Me — NEFFEX.mp3");
             //Thread play = new Thread(NAudioPocessor.Play);
             //play.Start();
             audioProcessor.Play();
