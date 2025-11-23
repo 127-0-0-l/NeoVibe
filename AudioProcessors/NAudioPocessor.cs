@@ -3,17 +3,17 @@ using NAudio.Wave;
 using NeoVibe.Constants;
 using NeoVibe.Core;
 using NeoVibe.Extensions;
-using NeoVibe.Utils;
+using NeoVibe.Interfaces;
 
 namespace NeoVibe.AudioProcessors
 {
-    internal static class NAudioPocessor
+    internal class NAudioPocessor : IAudioProcessor
     {
-        private static AudioFileReader _audioFileReader;
-        private static AudioFileReader _fftReader;
-        private static WaveOutEvent _outputDevice = new WaveOutEvent();
+        private AudioFileReader _audioFileReader;
+        private AudioFileReader _fftReader;
+        private WaveOutEvent _outputDevice = new WaveOutEvent();
 
-        internal static void SetAudio(string filePath)
+        void IAudioProcessor.SetAudio(string filePath)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace NeoVibe.AudioProcessors
             }
         }
 
-        internal static void SetTime(TimeSpan time)
+        void IAudioProcessor.SetTime(TimeSpan time)
         {
             ExecuteInitialized(() =>
             {
@@ -36,7 +36,7 @@ namespace NeoVibe.AudioProcessors
             });
         }
 
-        internal static float[] GetFFT(int minFFTLength)
+        float[] IAudioProcessor.GetFFT(int minFFTLength)
         {
             // multiple by 2 becouse of fft array have two mirrored parts.
             // i take only one of them (fftLength/2 items)
@@ -95,13 +95,13 @@ namespace NeoVibe.AudioProcessors
             return result;
         }
 
-        internal static void Play() => ExecuteInitialized(_outputDevice.Play);
+        void IAudioProcessor.Play() => ExecuteInitialized(_outputDevice.Play);
 
-        internal static void Pause() => ExecuteInitialized(_outputDevice.Pause);
+        void IAudioProcessor.Pause() => ExecuteInitialized(_outputDevice.Pause);
 
-        internal static void Stop() => ExecuteInitialized(_outputDevice.Stop);
+        void IAudioProcessor.Stop() => ExecuteInitialized(_outputDevice.Stop);
 
-        internal static void Restart()
+        void IAudioProcessor.Restart()
         {
             ExecuteInitialized(() =>
             {
@@ -111,13 +111,12 @@ namespace NeoVibe.AudioProcessors
             });
         }
 
-        private static void ExecuteInitialized(Action action)
+        private void ExecuteInitialized(Action action)
         {
             if (_outputDevice.IsInitialized())
                 action();
             else
                 ErrorHandler.ShowError(ErrorMessage.OutputDeviceNotInit);
         }
-
     }
 }

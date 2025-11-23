@@ -39,10 +39,11 @@ namespace NeoVibe.Core
                 new MatrixVisualizer()
             });
 
-            NAudioPocessor.SetAudio(@"D:\all music\Breaking Point — Unaverage Gang.mp3");
+            IAudioProcessor audioProcessor = new NAudioPocessor();
+            audioProcessor.SetAudio(@"C:\Users\maks\Downloads\Linkin Park - Burn It Down.mp3");
             //Thread play = new Thread(NAudioPocessor.Play);
             //play.Start();
-            NAudioPocessor.Play();
+            audioProcessor.Play();
 
             // main loop
             Stopwatch frameTime = new Stopwatch();
@@ -50,7 +51,7 @@ namespace NeoVibe.Core
             {
                 frameTime.Start();
 
-                float[] fft = NAudioPocessor.GetFFT(viewports[0].Width);
+                float[] fft = audioProcessor.GetFFT(viewports[0].Width);
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < fft.Length; i++)
                 {
