@@ -13,6 +13,7 @@ namespace NeoVibe.Core
         {
             _viewports = viewports;
             CheckResize();
+            Console.CursorVisible = false;
         }
 
         internal static void KeyPress(ConsoleKey key)

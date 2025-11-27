@@ -49,7 +49,7 @@ namespace NeoVibe.AudioProcessors
 
         void IAudioProcessor.SetTime(TimeSpan time)
         {
-            Bass.BASS_ChannelSetPosition(_streamId, time.Seconds);
+            Bass.BASS_ChannelSetPosition(_streamId, time.TotalSeconds);
             //int time = (int)Bass.BASS_ChannelBytes2Seconds(_streamId, Bass.BASS_ChannelGetPosition(_streamId));
         }
 

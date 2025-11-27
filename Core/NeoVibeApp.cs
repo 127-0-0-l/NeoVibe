@@ -40,10 +40,13 @@ namespace NeoVibe.Core
             });
 
             IAudioProcessor audioProcessor = new BassNetProcessor();
-            audioProcessor.SetAudio(@"D:\all music\Watch Me — NEFFEX.mp3");
+            //audioProcessor.SetAudio(@"C:\Users\maks\Music\Warcraft III - Reign of Chaos & The Frozen Throne - Full Soundtrack (more than 3 hours) (1080p).mp4");
+            //audioProcessor.SetAudio(@"C:\Users\maks\Downloads\Linkin Park - Faint.mp3");
+            audioProcessor.SetAudio(@"C:\Users\maks\Music\yt-music\Calvin Harris - Outside ft. Ellie Goulding (slowed + reverb).mp3");
             //Thread play = new Thread(NAudioPocessor.Play);
             //play.Start();
             audioProcessor.Play();
+            //audioProcessor.SetTime(TimeSpan.FromSeconds(2580));
 
             // main loop
             Stopwatch frameTime = new Stopwatch();
