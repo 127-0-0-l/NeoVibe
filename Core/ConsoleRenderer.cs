@@ -8,6 +8,8 @@ namespace NeoVibe.Core
         private static int _consoleHeight;
         private static int _consoleWidth;
         private static Viewport[] _viewports;
+		private static ConsoleColor[] _consoleColors = (ConsoleColor[])Enum.GetValues(typeof(ConsoleColor));
+		private static int _currentConsoleColorIndex = 1;
 
         internal static void Init(Viewport[] viewports)
         {
@@ -20,6 +22,14 @@ namespace NeoVibe.Core
         {
             switch (key)
             {
+				case ConsoleKey.RightArrow:
+					_currentConsoleColorIndex = _currentConsoleColorIndex < _consoleColors.Length - 1 ? ++_currentConsoleColorIndex : 1;
+					Console.ForegroundColor = _consoleColors[_currentConsoleColorIndex];
+					break;
+				case ConsoleKey.LeftArrow:
+					_currentConsoleColorIndex = _currentConsoleColorIndex > 1 ? --_currentConsoleColorIndex : _consoleColors.Length - 1;
+					Console.ForegroundColor = _consoleColors[_currentConsoleColorIndex];
+					break;
                 case ConsoleKey.Escape:
                     Environment.Exit(Environment.ExitCode);
                     break;
