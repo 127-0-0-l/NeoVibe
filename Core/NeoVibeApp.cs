@@ -3,7 +3,6 @@ using NeoVibe.Interfaces;
 using NeoVibe.Layout;
 using NeoVibe.Visualisers;
 using System.Diagnostics;
-using System.Text;
 
 namespace NeoVibe.Core
 {
@@ -40,32 +39,28 @@ namespace NeoVibe.Core
             });
 
             IAudioProcessor audioProcessor = new BassNetProcessor();
-            //audioProcessor.SetAudio(@"C:\Users\maks\Music\Warcraft III - Reign of Chaos & The Frozen Throne - Full Soundtrack (more than 3 hours) (1080p).mp4");
-            //audioProcessor.SetAudio(@"C:\Users\maks\Downloads\Linkin Park - Faint.mp3");
-            audioProcessor.SetAudio(@"C:\Users\maks\Music\yt-music\Calvin Harris - Outside ft. Ellie Goulding (slowed + reverb).mp3");
-            //Thread play = new Thread(NAudioPocessor.Play);
-            //play.Start();
+            audioProcessor.SetAudio(@"");
             audioProcessor.Play();
-            //audioProcessor.SetTime(TimeSpan.FromSeconds(2580));
 
             // main loop
             Stopwatch frameTime = new Stopwatch();
+            int counter = 0;
             while (true)
             {
                 frameTime.Start();
 
                 float[] fft = audioProcessor.GetFFT(viewports[0].Width);
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < fft.Length; i++)
-                {
-                    sb.Append($"{fft[i]}\n");
-                }
-
                 bool[,] vFrame = visualizerManager.RenderFrame(fft, viewports[0].Width, viewports[0].Height);
                 visualizerViewport.SetFrame(vFrame);
-                ConsoleRenderer.RenderFrame();
+                ConsoleRenderer.RenderFrame(counter);
+                counter = 0;
 
-                while(frameTime.ElapsedTicks < _ticksPerFrame) { }
+                while(frameTime.ElapsedTicks < _ticksPerFrame)
+                {
+                    Thread.Sleep(1);
+                    counter++;
+                }
+
                 frameTime.Reset();
             }
         }

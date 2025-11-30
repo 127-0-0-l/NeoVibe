@@ -38,7 +38,7 @@ namespace NeoVibe.Core
             }
         }
 
-        internal static void RenderFrame()
+        internal static void RenderFrame(int counter)
         {
             CheckResize();
 
@@ -47,6 +47,10 @@ namespace NeoVibe.Core
             for (int i = 0; i < _consoleHeight; i++)
                 for (int j = 0; j < _consoleWidth; j++)
                     sb.Append(viewport[j, i]);
+
+            string c = counter.ToString("D2");
+            for (int i = 0; i < c.Length; i++)
+                sb[i] = c[i];
 
             Console.SetCursorPosition(0, 0);
             Console.Write(sb);
