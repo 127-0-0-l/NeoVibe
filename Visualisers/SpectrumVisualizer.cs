@@ -13,65 +13,33 @@ namespace NeoVibe.Visualisers
         bool[,] IVisualizer.RenderFrame(float[] fftData, int width, int height)
         {
             ValidateSize(width, height);
-            int blockSize = fftData.Length / _width;
 
-            // for (int i = 0; i < fftData.Length; i++)
-            // {
-                // fftData[i] = fftData[i] * (1 + i / blockSize / 2);
-            // }
-			
 			for (int i = 0; i < fftData.Length; i++)
             {
                 fftData[i] *= (float)Math.Sqrt(1 + i);
             }
 			
-			// float maxFFT = Math.Max(fftData.Max(), _minFFTMax);
-			// for (int i = 0; i < fftData.Length; i++)
-            // {
-                // fftData[i] = fftData[i] / maxFFT;
-            // }
-			
 			float[] blockFFT = new float[_width];
-			for (int i = 0; i < _width; i++)
+            int blockSize = fftData.Length / _width;
+			for (int i = 0; i < blockFFT.Length; i++)
             {
                 float sum = 0;
                 for (int j = 0; j < blockSize; j++)
-                {
-                    sum += fftData[i + j];
-                }
+                    sum += fftData[i * blockSize + j];
                 blockFFT[i] = sum / blockSize;
             }
 			
 			float maxFFT = Math.Max(blockFFT.Max(), _minFFTMax);
-			//float maxFFT = blockFFT.Max();
 			for (int i = 0; i < blockFFT.Length; i++)
             {
                 blockFFT[i] = blockFFT[i] / maxFFT * _heightFactor;
             }
 
-            // int[] heights = new int[_width];
-            // for (int i = 0; i < _width; i++)
-            // {
-                // float sum = 0;
-                // for (int j = 0; j < blockSize; j++)
-                // {
-                    // sum += fftData[i + j];
-                // }
-                // heights[i] = (int)(sum / blockSize * _height);
-                // heights[i] = heights[i] >= _previousHeights[i] ? heights[i] : _previousHeights[i] - 1;
-                // heights[i] = (heights[i] + _previousHeights[i]) / 2;
-            // }
-			
-			int[] heights = new int[_width];
-            for (int i = 0; i < _width; i++)
+			int[] heights = new int[blockFFT.Length];
+            for (int i = 0; i < heights.Length; i++)
             {
                 heights[i] = (int)(blockFFT[i] * _height);
-                heights[i] = heights[i] >= _previousHeights[i] ? heights[i] : _previousHeights[i] - 1;
-                //heights[i] = (heights[i] + _previousHeights[i]) / 2;
-            }
-
-            for (int i = 0; i < _width; i++)
-            {
+                //heights[i] = heights[i] >= _previousHeights[i] ? heights[i] : _previousHeights[i] - 1;
                 _previousHeights[i] = heights[i];
             }
 
