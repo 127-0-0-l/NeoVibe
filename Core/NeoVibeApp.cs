@@ -39,7 +39,7 @@ namespace NeoVibe.Core
             });
 
             IAudioProcessor audioProcessor = new BassNetProcessor();
-            audioProcessor.SetAudio(@"");
+            audioProcessor.SetAudio(@"D:\all music\The Diary of Jane Breaking Benjamin.mp3");
             audioProcessor.Play();
 
             // main loop
